@@ -28,9 +28,7 @@ server.get('Product', consentTracking.consent, cache.applyDefaultCache, function
     var setPid = '25594785M';
     var pid = req.httpParameterMap.setPid;
     var showProductPageHelperResult = productHelper.showProductPage(req.querystring, req.pageMetaData);
-    
-
-    res.render('product/customProductDetail', {
+        res.render('product/customProductDetail', {
         product: showProductPageHelperResult.product,
         addToCartUrl: showProductPageHelperResult.addToCartUrl,
         resources: showProductPageHelperResult.resources,

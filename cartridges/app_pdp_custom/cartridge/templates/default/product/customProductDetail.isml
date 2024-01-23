@@ -9,17 +9,23 @@
 
 <isdecorate template="common/layout/page">
     <div class="container">
-    <div class="row col-12 d-flex">
-        <div class="col-6">
-        hey
+        <div class="row col-12">
+            <p> <a href="${breadcrumbs[0].url}">${breadcrumbs[0].htmlValue}</a> / <a
+                    href="${breadcrumbs[1].url}">${breadcrumbs[1].htmlValue}</a> / <a
+                    href="${breadcrumbs[2].url}">${breadcrumbs[2].htmlValue}</a></p>
         </div>
-        <div class="col-6">
-        <p>${breadcrumbs}</p>
-        <h1>${product.id}</h1>
-    
+        <div class="row col-12 d-flex">
+            <div class="col-6" style="height:600px; overflow:hidden">
+                <img style="width:400px; height:auto" src="${product.images.large[0].url}" alt="${product.images.large[0].alt}"/>
+                <img src="${product.images.small[0].url}" alt="${product.image.small[0].alt}"/>
+            </div>
+            <div class="col-6">
+
+                <h1>${product.productName}</h1>
+                <h4>${product.shortDescription}</h4>
+                <h4>${product.longDescription}</h4>
+                <h3>${product.price.sales.formatted}</h3>
+            </div>
         </div>
-    </div>
-    
-    
     </div>
 </isdecorate>
