@@ -1,0 +1,25 @@
+<isset name="product" value="${pdict.product}" scope="page" />
+<isset name="addToCartUrl" value="${pdict.addToCartUrl}" scope="page" />
+<isset name="resources" value="${pdict.resources}" scope="page" />
+<isset name="breadcrumbs" value="${pdict.breadcrumbs}" scope="page" />
+<isset name="canonicalUrl" value="${pdict.canonicalUrl}" scope="page" />
+<isset name="schemaData" value="${pdict.schemaData}" scope="page" />
+
+
+
+<isdecorate template="common/layout/page">
+    <div class="container">
+    <div class="row col-12 d-flex">
+        <div class="col-6">
+        hey
+        </div>
+        <div class="col-6">
+        <p>${breadcrumbs}</p>
+        <h1>${product.id}</h1>
+    
+        </div>
+    </div>
+    
+    
+    </div>
+</isdecorate>
