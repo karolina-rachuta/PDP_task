@@ -1,3 +1,11 @@
+<isscript>
+    var assets = require('*/cartridge/scripts/assets.js');
+    assets.addJs('/js/custom.js');
+    assets.addJs('/js/productDetail.js');
+    assets.addCss('/css/product/detail.css');
+    assets.addCss('/css/custom.css');
+</isscript>
+
 <isset name="product" value="${pdict.product}" scope="page" />
 <isset name="addToCartUrl" value="${pdict.addToCartUrl}" scope="page" />
 <isset name="resources" value="${pdict.resources}" scope="page" />
@@ -9,22 +17,172 @@
 
 <isdecorate template="common/layout/page">
     <div class="container">
+        <!-- breadcrumbs -->
         <div class="row col-12">
-            <p> <a href="${breadcrumbs[0].url}">${breadcrumbs[0].htmlValue}</a> / <a
-                    href="${breadcrumbs[1].url}">${breadcrumbs[1].htmlValue}</a> / <a
-                    href="${breadcrumbs[2].url}">${breadcrumbs[2].htmlValue}</a></p>
-        </div>
-        <div class="row col-12 d-flex">
-            <div class="col-6" style="height:600px; overflow:hidden">
-                <img style="width:400px; height:auto" src="${product.images.large[0].url}" alt="${product.images.large[0].alt}"/>
-                <img src="${product.images.small[0].url}" alt="${product.image.small[0].alt}"/>
+            <div class="pt-2 pb-2 row col-12">
+                <ol class="breadcrumb" style="border: none">
+                    <isloop items="${breadcrumbs}" var="breadcrumb" status="loopstatus">
+                        <li class="breadcrumb-item" aria-current="page"><a
+                                href="${breadcrumb.url}">${breadcrumb.htmlValue}</a></li>
+                    </isloop>
+                </ol>
             </div>
-            <div class="col-6">
+        </div>
+        <!-- images -->
+        <div class="row col-12 d-flex">
+            <div class="col-6" style="height:600px; overflow:hidden ">
+                <isif condition="${product.images.large}">
+                    <img style="width:400px; height:auto" src="${product.images.large[0].url}"
+                        alt="${product.images.large[0].alt}" />
+                </isif>
+                <isif condition="${product.thumbnail}">
+                    <iscomment>
+                        <isloop items="${product.thumbnail.thumbnail}" var="image" status="loopstatus">
+                            <img src="${image.url}" alt="${image.alt}" />
+                        </isloop>
+                    </iscomment>
 
+
+
+                    <div id="thumbnailVerticalCarousel" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <isloop items="${product.thumbnail.thumbnail}" var="image" status="loopstatus">
+                                <div class="carousel-item ${loopstatus.index === 0 ? 'active' : ''}">
+                                    <img src="${image.url}" class="d-block w-20" alt="${image.alt}" />
+                                </div>
+                            </isloop>
+                            <button class="carousel-control-prev btn-carousel" type="button"
+                                data-target="#thumbnailVerticalCarousel" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden"></span>
+                            </button>
+                            <button class="carousel-control-next btn-carousel" type="button"
+                                data-target="#thumbnailVerticalCarousel" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden"></span>
+                            </button>
+                        </div>
+                    </div>
+                </isif>
+
+            </div>
+
+            <!-- right container: name, prices, description, sizes -->
+            <div class="col-6">
                 <h1>${product.productName}</h1>
-                <h4>${product.shortDescription}</h4>
-                <h4>${product.longDescription}</h4>
-                <h3>${product.price.sales.formatted}</h3>
+                <isif condition="${product.price.list}">
+                    <h3>${product.price.list}</h3>
+                <iselse/>
+                    <h3>${product.price.sales.formatted}</h3>
+                </isif>
+
+                <p class="p_short_Description" style="height: 48px; display: block; overflow:hidden">
+                    ${product.shortDescription}</p>
+                <p class="p_long_Description" style="display: none">${product.longDescription}</p>
+                <button class="btn btn-outline-primary btn_toggle">Show all</button>
+                <hr>
+                <h3>Size:</h3>
+                <div class="d-flex attribute">
+                    <!-- Select <Attribute> Label -->
+                    <isif condition="${product.variationAttributes}">
+                        <!-- Attribute Values Drop Down Menu -->
+                        <iscomment>
+                            <div class="select-${product.variationAttributes[1].id}">
+                                <isloop items="${product.variationAttributes[1].values}" var="attrValue">
+                                    <button>
+                                        <span value="${attrValue.url}" data-attr-value="${attrValue.value}"
+                                            ${!attrValue.selectable ? 'disabled' : ''} ${attrValue.selected ? 'selected' : ''}>
+                                            ${attrValue.displayValue}
+                                        </span>
+                                        <span id="${attrValue.id}" class="sr-only selected-assistive-text">
+                                            ${attrValue.selected ? Resource.msg('msg.assistive.selected.text', 'common', null) : ''}
+                                        </span>
+                                    </button>
+                                </isloop>
+                            </div>
+                        </iscomment>
+                        <select class="col-4 custom-select form-control select-${product.variationAttributes[1].id}">
+                            <option value="${product.variationAttributes[1].resetUrl}">
+                                ${Resource.msg('label.select', 'common', null)}
+                                ${product.variationAttributes[1].displayName}
+                            </option>
+                            <isloop items="${product.variationAttributes[1].values}" var="attrValue">
+                                <option value="${attrValue.url}" data-attr-value="${attrValue.value}"
+                                    ${!attrValue.selectable ? 'disabled' : ''} ${attrValue.selected ? 'selected' : ''}>
+                                    ${attrValue.displayValue}
+                                </option>
+                            </isloop>
+                        </select>
+                        <iscomment>
+                            <isif condition="${product.variationAttributes}">
+                                <isloop items="${product.variationAttributes[1].values}" var="size" status="loopstatus">
+                                    <button class="value=${size.url}">
+                                        <span data-size-value="${size.value}"
+                                            class="${size.id}-value swatch-circle swatch-value mx-2 ${size.selected ? 'selected' : ''} ${size.selectable ? 'selectable' : 'unselectable'}">
+                                            ${size.displayValue}
+                                        </span>
+                                        <span id="${size.id}" class="sr-only selected-assistive-text">
+                                            ${size.selected ? $ {
+                                                size.value} : ''}
+                                        </span>
+                                    </button>
+                                </isloop>
+                        </iscomment>
+                    <iselse/>
+                        no extra attributes
+                    </isif>
+                </div>
+                <hr>
+
+                <div class="col-12">
+                    <h3>Quantity:</h3>
+                    <span>+</span>
+                    <isloop items="{product.quantities}" var="number" status="loopstatus">
+                        <span>${number.value}</span>
+                    </isloop>
+                    <span>-</span>
+
+                    <select class="quantity-select custom-select form-control"
+                        id="quantity-${loopState && loopState.count ? loopState.count : '1'}">
+                        <isloop items="${product.quantities}" var="quantity">
+                            <option value="${quantity.value}" <isif condition="${product.productType !== 'bundle'}">
+                                data-url="${quantity.url}"</isif>
+                                ${quantity.selected ? 'selected' : ''}
+                                >
+                                ${quantity.value}
+                            </option>
+                        </isloop>
+                    </select>
+
+                    <div class="btn-group" role="group" aria-label="Quantity">
+                        <isloop items="${product.quantities}" var="quantity">
+                            <button type="button" class="btn btn-outline-primary ${quantity.selected ? 'active' : ''}"
+                                value="${quantity.value}" data-url="${quantity.url}">
+                                ${quantity.value}
+                            </button>
+                        </isloop>
+                    </div>
+
+                    <iscomment>
+                        <isif condition="${product.promotions}">
+                            <isloop items="${product.promotions}" var="promotion" status="promdet">
+                                <div class="row collapsible-xl">
+                                    <div class="col-12">
+                                        <button class="title callout btn text-left btn-block" aria-expanded="false"
+                                            aria-controls="collapsible-promotion-details-${promdet.index}">
+                                            <isprint value="${promotion.calloutMsg}" encoding="off" />
+                                        </button>
+                                    </div>
+                                    <div class="col-12 value content"
+                                        id="collapsible-promotion-details-${promdet.index}">
+                                        <isprint value="${promotion.details}" encoding="off" />
+                                    </div>
+                                </div>
+                                <hr>
+                            </isloop>
+                        </isif>
+                    </iscomment>
+                </div>
             </div>
         </div>
     </div>

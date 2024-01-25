@@ -24,7 +24,7 @@
     "compile:scss": "sgmf-scripts --compile css",
     "compile:js": "sgmf-scripts --compile js",
     "compile:fonts": "node bin/Makefile compileFonts",
-    "build": "npm run compile:js && npm run compile:fonts && npm run compile:scss",
+    "build": "npm run compile:js && npm run compile:fonts && xvs",
     "lint": "npm run lint:css && npm run lint:js",
     "lint:css": "sgmf-scripts --lint css",
     "lint:js": "sgmf-scripts --lint js",
@@ -114,7 +114,10 @@
     "last 2 versions",
     "ie >= 10"
   ],
-  "packageName": "app_storefront_base",
+  "packageName": "app_pdp_custom",
+  "paths": {
+    "base": "./cartridges/app_storefront_base/"
+  },
   "babel": {
     "presets": [
       "env"
