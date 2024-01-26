@@ -33,3 +33,22 @@ quantity_minus_button.addEventListener("click", () => {
     }
 })
 });
+
+
+    var delivery_button = document.querySelector(".delivery_button");
+    var custom_delivery_info = document.querySelector(".custom_delivery_info");
+    var minus_sign_delivery = document.querySelector(".minus_sign_delivery");
+    var plus_sign_delivery = document.querySelector(".plus_sign_delivery");
+
+    delivery_button.addEventListener("click", () => {
+        if (custom_delivery_info.style.display === 'none') {
+            custom_delivery_info.style.display = 'block';
+            minus_sign_delivery.style.display = 'none'
+            plus_sign_delivery.style.display = 'inline'
+
+        } else if (custom_delivery_info.style.display === 'block') {
+            custom_delivery_info.style.display = 'none';
+            minus_sign_delivery.style.display = 'inline'
+            plus_sign_delivery.style.display = 'none'
+        }
+    });
