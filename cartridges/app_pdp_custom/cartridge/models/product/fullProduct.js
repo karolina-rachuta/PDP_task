@@ -24,5 +24,8 @@ module.exports = function fullProduct(product, apiProduct, options) {
     } else {
         decorators.thumbnailImages(product, apiProduct, { types: ['thumbnail'], quantity: 'all' });
     }
+    decorators.customPromotions(product);
+    decorators.customProductDelivery(product, apiProduct);
+    // decorators.customProductDetails(product);
     return product;
 };

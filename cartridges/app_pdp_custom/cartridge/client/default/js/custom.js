@@ -22,18 +22,14 @@ var getChosenValue = parseInt(quantity_select.value);
 quantity_plus_button.addEventListener("click", () => {
     if (getChosenValue < 10){
         getChosenValue++
-        updateQuantity()
+        quantity_select.value = getChosenValue;
     }
 })
 
 quantity_minus_button.addEventListener("click", () => {
     if (getChosenValue > 1){
         getChosenValue--
-        updateQuantity()
+        quantity_select.value = getChosenValue;
     }
 })
-
-function updateQuantity() {
-    quantity_select.value = getChosenValue;
-}
 });

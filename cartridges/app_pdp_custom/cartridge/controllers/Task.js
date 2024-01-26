@@ -25,8 +25,7 @@ var pageMetaData = require('*/cartridge/scripts/middleware/pageMetaData');
  */
 server.get('Product', consentTracking.consent, cache.applyDefaultCache, function (req, res, next) {
     var productHelper = require('*/cartridge/scripts/helpers/productHelpers');
-    var setPid = '25594785M';
-    var pid = req.httpParameterMap.setPid;
+    
     var showProductPageHelperResult = productHelper.showProductPage(req.querystring, req.pageMetaData);
         res.render('product/customProductDetail', {
         product: showProductPageHelperResult.product,
