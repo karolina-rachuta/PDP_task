@@ -34,7 +34,7 @@ quantity_minus_button.addEventListener("click", () => {
 })
 });
 
-
+// Deliery
     var delivery_button = document.querySelector(".delivery_button");
     var custom_delivery_info = document.querySelector(".custom_delivery_info");
     var minus_sign_delivery = document.querySelector(".minus_sign_delivery");
@@ -50,5 +50,24 @@ quantity_minus_button.addEventListener("click", () => {
             custom_delivery_info.style.display = 'none';
             minus_sign_delivery.style.display = 'inline'
             plus_sign_delivery.style.display = 'none'
+        }
+    });
+
+    // Detail
+    var detail_button = document.querySelector(".detail_button");
+    var custom_detail_info = document.querySelector(".custom_detail_info");
+    var minus_sign_detail = document.querySelector(".minus_sign_detail");
+    var plus_sign_detail = document.querySelector(".plus_sign_detail");
+
+    detail_button.addEventListener("click", () => {
+        if (custom_detail_info.style.display === 'none') {
+            custom_detail_info.style.display = 'block';
+            minus_sign_detail.style.display = 'none'
+            plus_sign_detail.style.display = 'inline'
+
+        } else if (custom_detail_info.style.display === 'block') {
+            custom_detail_info.style.display = 'none';
+            minus_sign_detail.style.display = 'inline'
+            plus_sign_detail.style.display = 'none'
         }
     });

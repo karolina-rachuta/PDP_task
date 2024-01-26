@@ -26,6 +26,6 @@ module.exports = function fullProduct(product, apiProduct, options) {
     }
     decorators.customPromotions(product);
     decorators.customProductDelivery(product, apiProduct);
-    // decorators.customProductDetails(product);
+    decorators.customProductDetails(product, apiProduct);
     return product;
 };

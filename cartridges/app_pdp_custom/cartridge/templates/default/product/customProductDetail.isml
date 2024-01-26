@@ -128,7 +128,9 @@
 
                 <div class="col-12 d-flex flex-column justify-content-center align-items-center">
                     <isif condition="${product.availability.messages[0] === 'In Stock'}">
-                        <button class="btn btn-primary m-2">Add to cart</button>
+                        <input type="hidden" class="add-to-cart-url" value="${pdict.addToCartUrl}">
+                        <button class="add-to-cart btn btn-primary m-2" data-toggle="modal"
+                            data-target="#chooseBonusProductModal" data-pid="${product.id}">Add to cart</button>
                         <isset name="customPromotion" value="${product.customPromotion}" scope="page" />
                         <isprint value="${customPromotion}" encoding="off" />
                     <iselse/>
@@ -146,12 +148,20 @@
                 <div class="col-sm-12 col-md-4 col-lg-3">
                     <button class="title btn text-left btn-block delivery_button">
                         <h2>
-                        <svg class="minus_sign_delivery" style="display: inline" width="15px" height="15px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
+                            <svg class="minus_sign_delivery" style="display: inline" width="15px" height="15px"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path
+                                    d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
+                            </svg>
 
-                    
-                        <svg class="plus_sign_delivery" style="display: none" width="15px" height="15px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                
-                         Delivery:</h2>
+
+                            <svg class="plus_sign_delivery" style="display: none" width="15px" height="15px" fill="blue"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path
+                                    d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                            </svg>
+
+                            Delivery:</h2>
                     </button>
                 </div>
 
@@ -159,15 +169,35 @@
                     <isset name="customDelivery" value="${product.deliveryInfo}" scope="page" />
                     <isprint value="${customDelivery}" encoding="off" />
                 </div>
+            </div>
 
+            <div class="row">
+                <div class="col-sm-12 col-md-4 col-lg-3">
+                    <button class="title btn text-left btn-block detail_button">
+                        <h2>
+                            <svg class="minus_sign_detail" style="display: inline" width="15px" height="15px"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path
+                                    d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
+                            </svg>
+
+
+                            <svg class="plus_sign_detail" style="display: none" width="15px" height="15px" fill="blue"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path
+                                    d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                            </svg>
+
+                            Details:</h2>
+                    </button>
+                </div>
+
+                <div class="col-sm-12 col-md-8 col-lg-9 custom_detail_info" style="display:none">
+                    <isset name="customDetail" value="${product.productDetails}" scope="page" />
+                    <isprint value="${customDetail}" encoding="off" />
+                </div>
 
             </div>
-            <iscomment>
-                <div>
-                    <isset name="customDelivery" value="${product.deliveryInfo}" scope="page" />
-                    <isprint value="${customDelivery}" encoding="off" />
-                </div>
-            </iscomment>
         </div>
     </div>
 </isdecorate>
