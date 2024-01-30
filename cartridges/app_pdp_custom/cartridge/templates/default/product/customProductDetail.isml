@@ -1,7 +1,7 @@
 <isscript>
     var assets = require('*/cartridge/scripts/assets.js');
+    <iscomment> assets.addJs('/js/productDetail.js'); </iscomment>
     assets.addJs('/js/custom.js');
-    assets.addJs('/js/productDetail.js');
     assets.addCss('/css/product/detail.css');
     assets.addCss('/css/custom.css');
 </isscript>
@@ -88,13 +88,30 @@
                     condition="${product.variationAttributes[1] !== null && product.variationAttributes[1] !== undefined}">
                     <div class="col-12">
                         <h3>Size:</h3>
+
                         <div class="d-flex attribute">
+                            <isset name="isBundle" value="${false}" scope="page" />
+                            <isset name="loopState" value="${{
+                                                           count: 1}}" scope="page" />
+                            <iscomment> <select
+                                    class="col-4 custom-select form-control select-${product.variationAttributes[1].id} id="
+                                    ${product.variationAttributes[1].id}-${loopState && loopState.count ? loopState.count : '1'}" ${product.productType === "variant" && isBundle ? "disabled" : ""}">
+                                    <option value="${product.variationAttributes[1].resetUrl}">
+                                        ${Resource.msg('label.select', 'common', null)}
+                                        ${product.variationAttributes[1].displayName}
+                                    </option>
+                                    <isloop items="${product.variationAttributes[1].values}" var="attrValue">
+                                        <option value="${attrValue.url}" data-attr-value="${attrValue.value}"
+                                            ${!attrValue.selectable ? 'disabled' : ''} ${attrValue.selected ? 'selected' : ''}>
+                                            ${attrValue.displayValue}
+                                        </option>
+                                    </isloop>
+                                </select> </iscomment>
+
                             <select
-                                class="col-4 custom-select form-control select-${product.variationAttributes[1].id}">
-                                <option value="${product.variationAttributes[1].resetUrl}">
-                                    ${Resource.msg('label.select', 'common', null)}
-                                    ${product.variationAttributes[1].displayName}
-                                </option>
+                                class="col-4 id="
+                                ${product.variationAttributes[1].id}-${loopState && loopState.count ? loopState.count : '1'}" ${product.productType === "variant" && isBundle ? "disabled" : ""}">
+            
                                 <isloop items="${product.variationAttributes[1].values}" var="attrValue">
                                     <option value="${attrValue.url}" data-attr-value="${attrValue.value}"
                                         ${!attrValue.selectable ? 'disabled' : ''} ${attrValue.selected ? 'selected' : ''}>
@@ -102,6 +119,22 @@
                                     </option>
                                 </isloop>
                             </select>
+
+                            <div class="col-12">
+                                <isloop items="${product.variationAttributes}" var="attr" status="loopstatus">
+                                    <isif condition="${attr.id === 'size'}">
+                                        <isloop items="${attr.values}" var="attrValue">
+                                            <button class="button-size btn btn-primary" data-url="${attrValue.url}"
+                                                data-attr-value="${attrValue.value}" ${attrValue.selected ? 'selected' : ''} ${attrValue.selectable ? 'selectable' : 'unselectable'}>
+                                                ${attrValue.displayValue}
+                                            </button>
+                                        </isloop>
+                                    </isif>
+
+                                </isloop>
+
+                            </div>
+
                         </div>
                     </div>
                     <hr />
@@ -127,15 +160,21 @@
                 <hr>
 
                 <div class="col-12 d-flex flex-column justify-content-center align-items-center">
-                    <isif condition="${product.availability.messages[0] === 'In Stock'}">
-                        <input type="hidden" class="add-to-cart-url" value="${pdict.addToCartUrl}">
-                        <button class="add-to-cart btn btn-primary m-2" data-toggle="modal"
-                            data-target="#chooseBonusProductModal" data-pid="${product.id}">Add to cart</button>
-                        <isset name="customPromotion" value="${product.customPromotion}" scope="page" />
-                        <isprint value="${customPromotion}" encoding="off" />
+                    <iscomment>
+                        <isif condition="${product.availability.messages[0] === 'In Stock'}">
+                    </iscomment>
+                    <input type="hidden" class="add-to-cart-url" value="${pdict.addToCartUrl}">
+                    <button class="add-to-cart btn btn-primary m-2" data-toggle="modal"
+                        data-target="#chooseBonusProductModal" data-pid="${product.id}"> Add to cart</button>
+                    <isset name="customPromotion" value="${product.customPromotion}" scope="page" />
+                    <isprint value="${customPromotion}" encoding="off" />
+                    <iscomment>
                     <iselse/>
                         <p class="mx-2 d-inline italic">${product.availability.messages[0]}</p>
-                    </isif>
+                    </iscomment>
+                    <iscomment>
+                        </isif>
+                    </iscomment>
 
                 </div>
             </div>

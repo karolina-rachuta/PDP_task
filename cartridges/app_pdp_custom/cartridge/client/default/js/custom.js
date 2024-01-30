@@ -1,3 +1,11 @@
+'use strict';
+
+var processInclude = require('./util');
+
+$(document).ready(function () {
+    processInclude(require('./product/detail'));
+});
+
 var btn_toggle = document.getElementsByClassName("btn_toggle")[0];
 var p_short_Description = document.getElementsByClassName("p_short_Description")[0];
 var p_long_Description = document.getElementsByClassName("p_long_Description")[0];
@@ -12,6 +20,8 @@ btn_toggle.addEventListener("click", () => {
         p_short_Description.style.display = "block";
     }
 });
+
+
 document.addEventListener("DOMContentLoaded", function () {
     var quantity_plus_button = document.querySelector(".quantity_plus_button");
     var quantity_minus_button = document.querySelector(".quantity_minus_button");
