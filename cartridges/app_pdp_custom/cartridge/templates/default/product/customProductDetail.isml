@@ -1,6 +1,5 @@
 <isscript>
     var assets = require('*/cartridge/scripts/assets.js');
-    <iscomment> assets.addJs('/js/productDetail.js'); </iscomment>
     assets.addJs('/js/custom.js');
     assets.addCss('/css/product/detail.css');
     assets.addCss('/css/custom.css');
@@ -16,7 +15,7 @@
 
 
 <isdecorate template="common/layout/page">
-    <div class="container">
+    <div class="container product-detail product-wrapper" data-pid="${product.id}">
         <!-- breadcrumbs -->
         <div class="row col-12">
             <div class="pt-2 pb-2 row col-12">
@@ -28,6 +27,7 @@
                 </ol>
             </div>
         </div>
+
         <!-- images -->
         <div class="row col-12 d-flex">
             <div class="col-6" style="height:600px; overflow:hidden ">
@@ -93,37 +93,8 @@
                             <isset name="isBundle" value="${false}" scope="page" />
                             <isset name="loopState" value="${{
                                                            count: 1}}" scope="page" />
-                            <iscomment> <select
-                                    class="col-4 custom-select form-control select-${product.variationAttributes[1].id} id="
-                                    ${product.variationAttributes[1].id}-${loopState && loopState.count ? loopState.count : '1'}" ${product.productType === "variant" && isBundle ? "disabled" : ""}">
-                                    <option value="${product.variationAttributes[1].resetUrl}">
-                                        ${Resource.msg('label.select', 'common', null)}
-                                        ${product.variationAttributes[1].displayName}
-                                    </option>
-                                    <isloop items="${product.variationAttributes[1].values}" var="attrValue">
-                                        <option value="${attrValue.url}" data-attr-value="${attrValue.value}"
-                                            ${!attrValue.selectable ? 'disabled' : ''} ${attrValue.selected ? 'selected' : ''}>
-                                            ${attrValue.displayValue}
-                                        </option>
-                                    </isloop>
-                                </select> </iscomment>
-
-                            <iscomment> <select class="col-4 select-${product.variationAttributes[1].id} id="
-                                ${product.variationAttributes[1].id}-${loopState && loopState.count ? loopState.count : '1'}" ${product.productType === "variant" && isBundle ? "disabled" : ""}">
-
-                                <isloop items="${product.variationAttributes[1].values}" var="attrValue">
-                                    <option value="${attrValue.url}" data-attr-value="${attrValue.value}"
-                                        ${!attrValue.selectable ? 'disabled' : ''} ${attrValue.selected ? 'selected' : ''}>
-                                        ${attrValue.displayValue}
-                                    </option>
-                                </isloop>
-                            </select> </iscomment>
-
                             <div class="col-12">
-                                <iscomment>
-                                    <isloop items="${product.variationAttributes}" var="attr" status="loopstatus">
-                                        <isif condition="${attr.id === 'size'}">
-                                </iscomment>
+
                                 <isloop items="${product.variationAttributes[1].values}" var="attrValue">
                                     <button class="button-size btn btn-primary" aria-describedby="${attrValue.id}"
                                         data-url="${attrValue.url}" ${product.productType === "variant" && isBundle ? "disabled" : ""}>
@@ -134,127 +105,124 @@
                                         ${attrValue.displayValue}
                                     </button>
                                 </isloop>
-                                <iscomment>
+                            </div>
+                        </div>
+
+                        <hr />
+                    </div>
                 </isif>
 
-                </isloop>
-                </iscomment>
+                <div class="col-12 d-flex justify-content-between">
+                    <h4 class="d-inline">Quantity:</h4>
+                    <div class="d-flex justify-content-end col-5 p-0">
+                        <button
+                            class="quantity_plus_button btn btn-outline-primary rounded-circle p-auto mx-2"><span>+</span></button>
+                        <select class="quantity_select col-3 quantity-select custom-select form-control border-0 p-0">
+                            <isloop items="${product.quantities}" var="quantity">
+                                <option value="${quantity.value}" ${quantity.selected ? 'selected' : ''}>
+                                    ${quantity.value}
+                                </option>
+                            </isloop>
+                        </select>
+                        <button type="button"
+                            class="quantity_minus_button btn btn-outline-primary rounded-circle p-auto"><span>
+                                -
+                            </span></button>
+                    </div>
+                </div>
+                <hr/>
 
-            </div>
+                <div class="col-12 d-flex flex-column justify-content-center align-items-center">
+                    <iscomment>
+                        <isif condition="${product.availability.messages[0] === 'In Stock'}">
+                    </iscomment>
+                    <input type="hidden" class="add-to-cart-url" value="${pdict.addToCartUrl}">
+                    <button class="add-to-cart btn btn-primary m-2" data-toggle="modal"
+                        data-target="#chooseBonusProductModal" data-pid="${product.id}"> Add to cart</button>
+                    <isset name="customPromotion" value="${product.customPromotion}" scope="page" />
+                    <isprint value="${customPromotion}" encoding="off" />
+                    <iscomment>
+                    <iselse/>
+                        <p class="mx-2 d-inline italic">${product.availability.messages[0]}</p>
+                    </iscomment>
+                    <iscomment>
+                        </isif>
+                    </iscomment>
 
-        </div>
-    </div>
-    <hr />
-    </isif>
+                </div>
 
-    <div class="col-12 d-flex justify-content-between">
-        <h4 class="d-inline">Quantity:</h4>
-        <div class="d-flex justify-content-end col-5 p-0">
-            <button
-                class="quantity_plus_button btn btn-outline-primary rounded-circle p-auto mx-2"><span>+</span></button>
-            <select class="quantity_select col-3 quantity-select custom-select form-control border-0 p-0">
-                <isloop items="${product.quantities}" var="quantity">
-                    <option value="${quantity.value}" ${quantity.selected ? 'selected' : ''}>
-                        ${quantity.value}
-                    </option>
-                </isloop>
-            </select>
-            <button type="button" class="quantity_minus_button btn btn-outline-primary rounded-circle p-auto"><span> -
-                </span></button>
-        </div>
-    </div>
-    <hr>
-
-    <div class="col-12 d-flex flex-column justify-content-center align-items-center">
-        <iscomment>
-            <isif condition="${product.availability.messages[0] === 'In Stock'}">
-        </iscomment>
-        <input type="hidden" class="add-to-cart-url" value="${pdict.addToCartUrl}">
-        <button class="add-to-cart btn btn-primary m-2" data-toggle="modal" data-target="#chooseBonusProductModal"
-            data-pid="${product.id}"> Add to cart</button>
-        <isset name="customPromotion" value="${product.customPromotion}" scope="page" />
-        <isprint value="${customPromotion}" encoding="off" />
-        <iscomment>
-        <iselse/>
-            <p class="mx-2 d-inline italic">${product.availability.messages[0]}</p>
-        </iscomment>
-        <iscomment>
-            </isif>
-        </iscomment>
-
-    </div>
-    </div>
-    </div>
-
-    <!-- bottom full-width container: details and delivery -->
-    <div class="col-12">
-
-        <div class="row">
-            <div class="col-sm-12 col-md-4 col-lg-3">
-                <button class="title btn text-left btn-block delivery_button">
-                    <h2>
-                        <svg class="minus_sign_delivery" style="display: inline" width="15px" height="15px"
-                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path
-                                d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
-                        </svg>
-
-
-                        <svg class="plus_sign_delivery" style="display: none" width="15px" height="15px" fill="blue"
-                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path
-                                d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                        </svg>
-
-                        Delivery:</h2>
-                </button>
-            </div>
-
-            <div class="col-sm-12 col-md-8 col-lg-9 custom_delivery_info" style="display:none">
-                <isset name="customDelivery" value="${product.deliveryInfo}" scope="page" />
-                <isprint value="${customDelivery}" encoding="off" />
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-sm-12 col-md-4 col-lg-3">
-                <button class="title btn text-left btn-block detail_button">
-                    <h2>
-                        <svg class="minus_sign_detail" style="display: inline" width="15px" height="15px"
-                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path
-                                d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
-                        </svg>
-
-
-                        <svg class="plus_sign_detail" style="display: none" width="15px" height="15px" fill="blue"
-                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path
-                                d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                        </svg>
-
-                        Details:</h2>
-                </button>
-            </div>
-
-            <div class="col-sm-12 col-md-8 col-lg-9 custom_detail_info" style="display:none">
-                <isset name="customDetail" value="${product.productDetails}" scope="page" />
-                <isprint value="${customDetail}" encoding="off" />
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Products Recommendations -->
-    <div class="row mt-2">
+        <!-- bottom full-width container: details and delivery -->
         <div class="col-12">
-            <h4 class="text-center">You may also like:</h4>
-            <div class="recommendations">
-                <isslot id="product-recommendations-m" description="Recommended products" context="global"
-                    context-object="${pdict.product.raw}" />
+
+            <div class="row">
+                <div class="col-sm-12 col-md-4 col-lg-3">
+                    <button class="title btn text-left btn-block delivery_button">
+                        <h2>
+                            <svg class="minus_sign_delivery" style="display: inline" width="15px" height="15px"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path
+                                    d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
+                            </svg>
+
+
+                            <svg class="plus_sign_delivery" style="display: none" width="15px" height="15px" fill="blue"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path
+                                    d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                            </svg>
+
+                            Delivery:</h2>
+                    </button>
+                </div>
+
+                <div class="col-sm-12 col-md-8 col-lg-9 custom_delivery_info" style="display:none">
+                    <isset name="customDelivery" value="${product.deliveryInfo}" scope="page" />
+                    <isprint value="${customDelivery}" encoding="off" />
+                </div>
             </div>
-            <iscomment> carousel of product tiles </iscomment>
+
+            <div class="row">
+                <div class="col-sm-12 col-md-4 col-lg-3">
+                    <button class="title btn text-left btn-block detail_button">
+                        <h2>
+                            <svg class="minus_sign_detail" style="display: inline" width="15px" height="15px"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path
+                                    d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
+                            </svg>
+
+
+                            <svg class="plus_sign_detail" style="display: none" width="15px" height="15px" fill="blue"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path
+                                    d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                            </svg>
+
+                            Details:</h2>
+                    </button>
+                </div>
+
+                <div class="col-sm-12 col-md-8 col-lg-9 custom_detail_info" style="display:none">
+                    <isset name="customDetail" value="${product.productDetails}" scope="page" />
+                    <isprint value="${customDetail}" encoding="off" />
+                </div>
+
+            </div>
+
+
+            <!-- Products Recommendations -->
+            <div class="row mt-2">
+                <div class="col-12">
+                    <h4 class="text-center">You may also like:</h4>
+                    <div class="recommendations">
+                        <isslot id="product-recommendations-m" description="Recommended products" context="global"
+                            context-object="${pdict.product.raw}" />
+                    </div>
+                    <iscomment> carousel of product tiles </iscomment>
+                </div>
+            </div>
         </div>
-    </div>
     </div>
 </isdecorate>
